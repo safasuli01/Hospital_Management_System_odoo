@@ -1,0 +1,72 @@
+<odoo>
+    <data>
+        <record id="hms_category" model="res.groups">
+            <field name="name">Hospital Management System (HMS)</field>
+        </record>
+
+        <record id="hms_manager_group" model="res.groups">
+            <field name="name">HMS Managers Group</field>
+            <field name="category_id" ref="hms.hms_category"/>
+        </record>
+
+        <record id="hms_user_group" model="res.groups">
+            <field name="name">HMS Users Group</field>
+            <field name="category_id" ref="hms.hms_category"/>
+        </record>
+
+        <record id="my_patient_record_rule" model="ir.rule">
+            <field name="name">my.patient.record.rule</field>
+            <field name="model_id" ref="hms.model_hms_patient"/>
+            <field name="domain_force">['|', ('user_id', '=', user.id), ('user_id', '=', False)]</field>
+            <field name="groups" eval="[(4, ref('hms.hms_user_group'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="manager_patient_record_rule" model="ir.rule">
+            <field name="name">manager.patient.record.rule</field>
+            <field name="model_id" ref="hms.model_hms_patient"/>
+            <field name="domain_force">[]</field>
+            <field name="groups" eval="[(4, ref('hms.hms_manager_group'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <record id="my_dept_record_rule" model="ir.rule">
+            <field name="name">my.dept.record.rule</field>
+            <field name="model_id" ref="hms.model_hms_dept"/>
+            <field name="domain_force">[]</field>
+            <field name="groups" eval="[(4, ref('hms.hms_user_group'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="my_doctor_record_rule" model="ir.rule">
+            <field name="name">my.doctor.record.rule</field>
+            <field name="model_id" ref="hms.model_hms_doctor"/>
+            <field name="domain_force">[]</field>
+            <field name="groups" eval="[(4, ref('hms.hms_user_group'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="manager_doctor_record_rule" model="ir.rule">
+            <field name="name">manager.doctor.record.rule</field>
+            <field name="model_id" ref="hms.model_hms_doctor"/>
+            <field name="domain_force">[]</field>
+            <field name="groups" eval="[(4, ref('hms.hms_manager_group'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+    </data>
+</odoo>

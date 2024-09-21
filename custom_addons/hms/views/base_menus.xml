@@ -1,0 +1,30 @@
+<odoo>
+    <!--  level 1  -->
+    <menuitem
+            id="menu_hospital"
+            name="HMS"
+            web_icon="hms,static/description/icon.png"
+    />
+    <!--  level 2 -nav patient  -->
+    <menuitem
+            id="menu_root_patient"
+            name="Patients"
+            parent="menu_hospital"
+
+    />
+    <!--  level 2 -nav dr  -->
+    <menuitem
+            id="menu_root_doctor"
+            name="Doctors"
+            parent="menu_hospital"
+
+    />
+    <!--  level 2 -nav depts  -->
+    <menuitem
+            id="menu_root_dept"
+            name="Departments"
+            parent="menu_hospital"
+
+    />
+
+</odoo>

@@ -1,0 +1,60 @@
+<odoo>
+    <!-- Tree View -->
+    <record id="doctor_tree_view" model="ir.ui.view">
+        <field name="name">doctor.tree.view</field>
+        <field name="model">hms.doctor</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="f_name"/>
+                <field name="l_name"/>
+                <field name="dept_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="doctor_form_view" model="ir.ui.view">
+        <field name="name">doctor.form.view</field>
+        <field name="model">hms.doctor</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="f_name"/>
+                        <field name="l_name"/>
+                        <field name="image"/>
+                    </group>
+                    <group>
+                        <field name="dept_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="doctor_search_view" model="ir.ui.view">
+        <field name="name">doctor.search.view</field>
+        <field name="model">hms.doctor</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="f_name"/>
+                <field name="l_name"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="doctor_action" model="ir.actions.act_window">
+        <field name="name">Doctors</field>
+        <field name="res_model">hms.doctor</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+            id="menu_item_doctor"
+            name="All Doctors"
+            parent="menu_root_doctor"
+            action="doctor_action"
+    />
+</odoo>
