@@ -1,72 +1,125 @@
 <odoo>
-    <data>
-        <record id="hms_category" model="res.groups">
-            <field name="name">Hospital Management System (HMS)</field>
-        </record>
+  <record id="patient_print" model="ir.actions.report">
+    <field name="name">Patient Print</field>
+    <field name="model">hms.patient</field>
+    <field name="report_type">qweb-html</field>
+    <field name="report_name">hms.patient_report_template</field>
+    <field name="report_file">hms.patient_report_template</field>
+    <field name="binding_model_id" ref="hms.model_hms_patient"/>
+    <field name="binding_type">report</field>
+    <field name="print_report_name">'Patient - %s' % (object.f_name) </field>
+  </record>
 
-        <record id="hms_manager_group" model="res.groups">
-            <field name="name">HMS Managers Group</field>
-            <field name="category_id" ref="hms.hms_category"/>
-        </record>
 
-        <record id="hms_user_group" model="res.groups">
-            <field name="name">HMS Users Group</field>
-            <field name="category_id" ref="hms.hms_category"/>
-        </record>
+  <template id="patient_report_template">
+    <t t-call="web.external_layout">
+      <div class="page">
+        <h1>Patient Report</h1>
+        <h3>Patient Information</h3>
+        <div class="row">
+          <div class="col-6">
+            <strong>First Name:</strong>
+            <span t-field="object.f_name"/>
+          </div>
+          <div class="col-6">
+            <strong>Last Name:</strong>
+            <span t-field="object.l_name"/>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <strong>Birth Date:</strong>
+            <span t-field="object.b_date"/>
+          </div>
+          <div class="col-6">
+            <strong>Age:</strong>
+            <span t-field="object.age"/>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <strong>Email:</strong>
+            <span t-field="object.email"/>
+          </div>
+          <div class="col-6">
+            <strong>Address:</strong>
+            <span t-field="object.address"/>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <strong>Blood Type:</strong>
+            <span t-field="object.blood_type"/>
+          </div>
+          <div class="col-6">
+            <strong>State:</strong>
+            <span t-field="object.state"/>
+          </div>
+        </div>
 
-        <record id="my_patient_record_rule" model="ir.rule">
-            <field name="name">my.patient.record.rule</field>
-            <field name="model_id" ref="hms.model_hms_patient"/>
-            <field name="domain_force">['|', ('user_id', '=', user.id), ('user_id', '=', False)]</field>
-            <field name="groups" eval="[(4, ref('hms.hms_user_group'))]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_unlink" eval="False"/>
-        </record>
-
-        <record id="manager_patient_record_rule" model="ir.rule">
-            <field name="name">manager.patient.record.rule</field>
-            <field name="model_id" ref="hms.model_hms_patient"/>
-            <field name="domain_force">[]</field>
-            <field name="groups" eval="[(4, ref('hms.hms_manager_group'))]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_unlink" eval="True"/>
-        </record>
-
-        <record id="my_dept_record_rule" model="ir.rule">
-            <field name="name">my.dept.record.rule</field>
-            <field name="model_id" ref="hms.model_hms_dept"/>
-            <field name="domain_force">[]</field>
-            <field name="groups" eval="[(4, ref('hms.hms_user_group'))]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="False"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_unlink" eval="False"/>
-        </record>
-
-        <record id="my_doctor_record_rule" model="ir.rule">
-            <field name="name">my.doctor.record.rule</field>
-            <field name="model_id" ref="hms.model_hms_doctor"/>
-            <field name="domain_force">[]</field>
-            <field name="groups" eval="[(4, ref('hms.hms_user_group'))]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="False"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_unlink" eval="False"/>
-        </record>
-
-        <record id="manager_doctor_record_rule" model="ir.rule">
-            <field name="name">manager.doctor.record.rule</field>
-            <field name="model_id" ref="hms.model_hms_doctor"/>
-            <field name="domain_force">[]</field>
-            <field name="groups" eval="[(4, ref('hms.hms_manager_group'))]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_unlink" eval="True"/>
-        </record>
-    </data>
+        <t t-if="object.image">
+          <div class="row">
+            <div class="col-12">
+              <img t-att-src="object.image" style="max-width: 200px; max-height: 200px;"/>
+            </div>
+          </div>
+        </t>
+        <h3>Department</h3>
+        <div class="row">
+          <div class="col-12">
+            <strong>Department Name:</strong>
+            <span t-field="object.dept_id.name"/>
+          </div>
+        </div>
+        <h3>Assigned Doctors</h3>
+        <t t-if="object.doctor_ids">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Department</th>
+              </tr>
+            </thead>
+            <tbody>
+              <t t-foreach="object.doctor_ids" t-as="doctor">
+                <tr>
+                  <td><span t-field="doctor.f_name"/></td>
+                  <td><span t-field="doctor.l_name"/></td>
+                  <td><span t-field="doctor.dept_id.name"/></td>
+                </tr>
+              </t>
+            </tbody>
+          </table>
+        </t>
+        <t t-if="not object.doctor_ids">
+          <p>No doctors assigned.</p>
+        </t>
+        <h3>Patient Log History</h3>
+        <t t-if="object.log_history_ids and not object.hide_log_history">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>Description</th>
+                <th>Old State</th>
+                <th>New State</th>
+              </tr>
+            </thead>
+            <tbody>
+              <t t-foreach="object.log_history_ids" t-as="log">
+                <tr>
+                  <td><span t-field="log.description"/></td>
+                  <td><span t-field="log.old_state"/></td>
+                  <td><span t-field="log.new_state"/></td>
+                </tr>
+              </t>
+            </tbody>
+          </table>
+        </t>
+        <t t-if="not object.log_history_ids or object.hide_log_history">
+          <p>No log history or history hidden.</p>
+        </t>
+      </div>
+    </t>
+  </template>
 </odoo>
