@@ -12,6 +12,7 @@ class Patient(models.Model):
     l_name = fields.Char("Last Name", required=True)
     user_id = fields.Many2one('res.users')
     b_date = fields.Date("Birth Date")
+    image = fields.Char("Image")
     history = fields.Html()
     cr_ratio = fields.Float()
     blood_type = fields.Selection([
